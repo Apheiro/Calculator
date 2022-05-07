@@ -1,0 +1,197 @@
+*{
+    font-family: 'Orbitron',sans-serif;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body{
+    background-color: #434A42;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;    
+}
+
+button{
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.app{
+    max-width: 1068px;
+    width: 1068px;
+    max-height:490px;
+    height: 490px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.calculatorBox{
+    background-color: #626C66;
+    max-width: 772px;
+    width: 772px;
+    max-height: 489px;
+    height: 489px;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    justify-content: space-around;
+}
+
+.display{
+    width: 100%;
+    height: 96px;
+    background-color: #ACA885;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    font-size: 62px;
+    color: #626C66;
+    padding: 10px 15px;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+    overscroll-behavior-x:inherit;
+}
+
+.buttonsBox{
+    width: 100%;
+    height: 312px;
+}
+.buttons{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 90px;
+    gap: 18px;
+    user-select: none;
+}
+
+ .buttons button{
+    border-style: none;
+    border-radius: 12px;
+    background-color: #7F8070;
+    color: #E1CA96;
+    font-size: 58px;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.1s;
+} 
+
+.equal{
+    grid-column-start: 1;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+.clearBtn{
+    font-size: 38px !important;
+    grid-column-start: 5;
+    grid-column-end: 8;
+    grid-row-start: 3;
+}
+
+.historyBox{
+    width: 278px;
+    height: 488px;
+    background-color: #ACA885;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    
+}
+
+.historyResult{
+    width: 278px;
+    height: 435px;
+    background-color: #ACA885;
+    border-radius: 13px;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end; */
+    overflow:auto;
+    scrollbar-width: none;
+    
+}
+
+.historyResult::-webkit-scrollbar {
+    display: none;
+}
+
+.historyResultBox{
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+}
+
+.hisResult{
+    display: flex;
+    flex-direction: column;
+    margin-left:21px;
+    width: 85%;
+    padding: 10px 0px;
+    border-bottom: solid #B9B590 2px;
+}
+
+.disOperation{
+    display: flex;
+    justify-content: end;
+    margin: 0px;
+    color: #626C66;
+    font-size: 15px;
+}
+
+.disResult{
+    display: flex;
+    justify-content: end;
+    margin: 2px;
+    font-weight: 100;
+    color: #434A42;
+    font-size: 23px;
+}
+
+.clearHistory{
+    position: absolute;
+    bottom: 10px;
+    max-width: 254px;
+    width: 254px;
+    max-height: 45px;
+    height: 45px;
+    background-color: #E1CA96;
+    font-size: 20px;
+    color: #626C66;
+    border-radius: 9px;
+    border-style: none;
+
+
+}
+
+.gitHub {
+    background-color: #B9B590;
+    border-radius: 100%;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.275s;
+    margin: 10px 0px 0px 790px;
+}
+
+.gitHub:hover {
+    transform: scale(1.2);
+}
