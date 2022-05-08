@@ -2,80 +2,149 @@ const buttons = document.querySelectorAll('.btn')
 const clearBtn = document.querySelector('#clearBtn')
 const display = document.querySelector('#displayCont')
 const historyResult = document.querySelector('#historyResult')
-const operators = /[-+×÷^]/g
+const clearHistory = document.querySelector('#clearHistory')
+const operators = /[-+×÷^]/
+const positiveNegative = /[⁺⁻]/
+const numPad = /[0-9]/
 let operator;
 let content;
 let mousedownTime;
 let num1;
 let num2;
 let result;
+let numAndOp;
 
 function history() {
-    const div = document.createElement('div')
-    const h1 = document.createElement('h1')
-    const p = document.createElement('p')
-    div.classList.add('hisResult');
-    h1.classList.add('disResult');
-    p.classList.add('disOperation');
-    h1.textContent = `${result}`;
+    const div = document.createElement('div'),
+          h1 = document.createElement('h1'),
+          p = document.createElement('p'),
+          childDiv = document.querySelector('.historyResultLog'),
+          shortResult = `${result}`.slice(0,7);
+    div.classList.add('historyResultLog');
+    h1.classList.add('displayResult');
+    p.classList.add('displayOperation');
+    h1.textContent = shortResult;
     p.textContent = `${content}`;
-    div.appendChild(p)
-    div.appendChild(h1)
-    historyResult.appendChild(div)
-    const childDiv = document.querySelector('.hisResult')
-    if (childDiv != undefined) {
-        historyResult.insertBefore(div, div);
-        console.log('noo')
+    div.appendChild(p);
+    div.appendChild(h1);
+    if (childDiv != null) {
+        historyResult.insertBefore(div, childDiv);
+    }else {historyResult.appendChild(div)}
+}
+function deleteDisplay(timeDifference) {
+    if (timeDifference < 500) {
+        const lastChar = display.textContent.charAt(display.textContent.length - 1)
+        if (lastChar == ' ') {
+            display.textContent = `${display.textContent.slice(0, -3)}`;
+        } else {
+            display.textContent = `${display.textContent.slice(0, -1)}`;
+        }
+        
+    } else {
+        display.textContent = '';
+    }
+}
+function calculator(numberAndOperator) {
+    num1 = Number(numberAndOperator[0].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
+    num2 = Number(numberAndOperator[2].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
+    operator = numberAndOperator[1];
+    
+    switch (operator) {
+        case "+":
+            result = num1 + num2;
+            break;
+        case "-":
+            result = num1 - num2;
+            break;
+        case "×":
+            result = num1 * num2;
+            break;
+        case "÷":
+            result = num1 / num2;
+            break;
+        case "^":
+            result = num1 ** num2;
+            break;
+    }
+    if (result.length == undefined) {
+        const shortResult = `${result}`.slice(0,10);
+        display.textContent = shortResult;
+    }else{display.textContent = `${result}`;}
+    
+}
+function signPositiveNegative() {
+    if (positiveNegative.test(display.textContent) && operators.test(content) || operators.test(content)) {
+        const operatorIndex = content.search(operators);
+        const firstPart = display.textContent.slice(0, operatorIndex + 2);
+        let secondPart = display.textContent.slice(operatorIndex + 2, display.textContent.length);
+            if (operators.test(display.textContent) && positiveNegative.test(num2)) {
+                secondPart = secondPart.replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "⁻" : "⁺" });
+                display.textContent = firstPart + secondPart;
+            } else {
+                secondPart = "⁺" + secondPart;
+                display.textContent = firstPart + secondPart;
+            }
+    } else {
+            if (positiveNegative.test(display.textContent) && positiveNegative.test(num1)) {
+                display.textContent = display.textContent.replace(/[⁺⁻]/, function(a) { return a === "⁺" ? "⁻" : "⁺" })
+            } else {display.textContent = "⁺".concat(display.textContent);}
+    }
+}
+function operatorDisplay(e) {
+        if (operators.test(` ${e.textContent} `) && operators.test(content)) {
+            display.textContent = display.textContent.replace(operators, e.textContent);
+        }else{display.textContent = display.textContent += ` ${e.textContent} `;}
+}
+function pointDisplay(e, point) {
+    if (/\./.test(display.textContent) && operators.test(content)) {
+            if (point >= 2) {
+                if ((e.textContent == '.')) { return }
+                else { display.textContent += `${e.textContent}` }
+            }
+            else { display.textContent += `${e.textContent}` };
+        }
+    else if (/\./.test(content) && /\./.test(e.textContent)) { return } 
+    else { display.textContent += `${e.textContent}`}
+}
+function inputbutton(e) {
+    if (display.textContent == `Hello` || display.textContent == `Infinity` || display.textContent == `NaN` || display.textContent == `undefined` || display.textContent == `infinit`) { display.textContent = `` };
+    const mouseupTime = e.timeStamp,
+          timeDifference = mouseupTime - mousedownTime,
+          point = display.textContent.split('.').length - 1;
+
+    switch (this.textContent) {
+        case "Del/Clear":
+            deleteDisplay(timeDifference);
+            break;
+        case '=':
+            calculator(numAndOp);
+            history();
+            break;
+        case '±':
+            signPositiveNegative()
+            break;
+        case ".":
+            pointDisplay(this, point)
+            break;
     }
 
+    if (numPad.test(this.textContent)) { display.textContent += `${this.textContent}`; }
+    else if (operators.test(this.textContent)) { operatorDisplay(this) };
     
-    console.log(childDiv)
-    console.dir(historyResult)
+    numAndOp = display.textContent.split(' ');
+    num1 = numAndOp[0]
+    num2 = numAndOp[2]
+    
+    content = display.textContent;
+}
+
+buttons.forEach(button => button.addEventListener('click', inputbutton));
+clearBtn.addEventListener('mousedown', (e) => mousedownTime = e.timeStamp);
+
+function deleteHistory() {
+    const historyLogs = document.querySelectorAll('.historyResultLog')
+    historyLogs.forEach((b) => historyResult.removeChild(b))
     
 }
 
-function inputbutton(e) {
-    const mouseupTime = e.timeStamp, timeDifference = mouseupTime - mousedownTime;
-    if (display.textContent == `Hello` || display.textContent == `Infinity`) { display.textContent = `` };
-    if (e.target.textContent == 'Del/Clear') {
-        if (timeDifference < 500) {
-            display.textContent = `${display.textContent.slice(0, -1)}`;
-        } else {
-            num1 = ''
-            display.textContent = '';
-        }
-    } else if (e.target.textContent == '=') {
-        
-        const operatorIndex = content.search(operators);
-        num1 = Number(content.slice(0, operatorIndex));
-        num2 = Number(content.slice(operatorIndex + 1, content.length));
-        operator = display.textContent.slice(operatorIndex, operatorIndex + 1);
-        switch (operator) {
-            case "+":
-                result = num1 + num2;
-                break;
-            case "-":
-                result = num1 - num2;
-                break;
-            case "×":
-                result = num1 * num2;
-                break;
-            case "÷":
-                result = num1 / num2;
-                break;
-            case "^":
-                result = num1 ** num2;
-                break;
-        }
-        display.textContent = `${result}`;
-        history();
-    } else {
-        if (operators.test(e.target.textContent) && operators.test(content)) {
-            display.textContent = display.textContent.replace(operators, e.target.textContent);
-        } 
-        else { display.textContent += `${this.textContent}` };
-    };
-    content = display.textContent;
-}
-buttons.forEach(button => button.addEventListener('click', inputbutton));
-clearBtn.addEventListener('mousedown', (e) => mousedownTime = e.timeStamp);
+clearHistory.addEventListener('click', deleteHistory);

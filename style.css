@@ -96,8 +96,8 @@ button:hover {
 }
 
 .clearBtn{
-    font-size: 38px !important;
-    grid-column-start: 5;
+    font-size: 30px !important;
+    grid-column-start: 6;
     grid-column-end: 8;
     grid-row-start: 3;
 }
@@ -138,7 +138,7 @@ button:hover {
     flex-direction: column;
 }
 
-.hisResult{
+.historyResultLog{
     display: flex;
     flex-direction: column;
     margin-left:21px;
@@ -147,7 +147,7 @@ button:hover {
     border-bottom: solid #B9B590 2px;
 }
 
-.disOperation{
+.displayOperation{
     display: flex;
     justify-content: end;
     margin: 0px;
@@ -155,7 +155,7 @@ button:hover {
     font-size: 15px;
 }
 
-.disResult{
+.displayResult{
     display: flex;
     justify-content: end;
     margin: 2px;
