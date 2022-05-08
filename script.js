@@ -66,10 +66,13 @@ function calculator(numberAndOperator) {
             result = num1 ** num2;
             break;
     }
-    if (result.length == undefined) {
-        const shortResult = `${result}`.slice(0,10);
-        display.textContent = shortResult;
-    }else{display.textContent = `${result}`;}
+    let shortResult = `${result}`
+    if (operators.test(shortResult)) {
+        shortResult = shortResult.replace("-", "⁻")
+        display.textContent = `${shortResult}`;
+    }else{display.textContent = shortResult;}
+    
+    
     
 }
 function signPositiveNegative() {
