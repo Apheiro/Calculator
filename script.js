@@ -45,32 +45,37 @@ function deleteDisplay(timeDifference) {
     }
 }
 function calculator(numberAndOperator) {
-    num1 = Number(numberAndOperator[0].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
-    num2 = Number(numberAndOperator[2].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
-    operator = numberAndOperator[1];
+
+    if (numberAndOperator[2] == undefined) { return } 
+    else {
+        num1 = Number(numberAndOperator[0].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
+        num2 = Number(numberAndOperator[2].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
+        operator = numberAndOperator[1];
+        switch (operator) {
+            case "+":
+                result = num1 + num2;
+                break;
+            case "-":
+                result = num1 - num2;
+                break;
+            case "×":
+                result = num1 * num2;
+                break;
+            case "÷":
+                result = num1 / num2;
+                break;
+            case "^":
+                result = num1 ** num2;
+                break;
+        }
+        let shortResult = `${result}`
+        if (operators.test(shortResult)) {
+            shortResult = shortResult.replace("-", "⁻")
+            display.textContent = `${shortResult}`;
+        }else{display.textContent = shortResult;}
+            }
     
-    switch (operator) {
-        case "+":
-            result = num1 + num2;
-            break;
-        case "-":
-            result = num1 - num2;
-            break;
-        case "×":
-            result = num1 * num2;
-            break;
-        case "÷":
-            result = num1 / num2;
-            break;
-        case "^":
-            result = num1 ** num2;
-            break;
-    }
-    let shortResult = `${result}`
-    if (operators.test(shortResult)) {
-        shortResult = shortResult.replace("-", "⁻")
-        display.textContent = `${shortResult}`;
-    }else{display.textContent = shortResult;}
+    
     
     
     
@@ -145,8 +150,11 @@ buttons.forEach(button => button.addEventListener('click', inputbutton));
 clearBtn.addEventListener('mousedown', (e) => mousedownTime = e.timeStamp);
 
 function deleteHistory() {
-    const historyLogs = document.querySelectorAll('.historyResultLog')
-    historyLogs.forEach((b) => historyResult.removeChild(b))
+    const historyLogs = document.querySelectorAll('.historyResultLog');
+    historyLogs.forEach((b) => {
+        b.classList.add('animationClear');
+        setTimeout(() => {historyResult.removeChild(b);}, 900);
+    })
     
 }
 
