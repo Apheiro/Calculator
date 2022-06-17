@@ -15,11 +15,11 @@ let result;
 let numAndOp;
 
 function history() {
-    const div = document.createElement('div'),
-          h1 = document.createElement('h1'),
-          p = document.createElement('p'),
-          childDiv = document.querySelector('.historyResultLog'),
-          shortResult = `${result}`.slice(0,7);
+    const div = document.createElement('div')
+    const h1 = document.createElement('h1')
+    const p = document.createElement('p')
+    const childDiv = document.querySelector('.historyResultLog')
+    const shortResult = `${result}`.slice(0,7);
     div.classList.add('historyResultLog');
     h1.classList.add('displayResult');
     p.classList.add('displayOperation');
@@ -31,6 +31,7 @@ function history() {
         historyResult.insertBefore(div, childDiv);
     }else {historyResult.appendChild(div)}
 }
+
 function deleteDisplay(timeDifference) {
     if (timeDifference < 500) {
         const lastChar = display.textContent.charAt(display.textContent.length - 1)
@@ -44,8 +45,8 @@ function deleteDisplay(timeDifference) {
         display.textContent = '';
     }
 }
-function calculator(numberAndOperator) {
 
+function calculator(numberAndOperator) {
     if (numberAndOperator[2] == undefined) { return } 
     else {
         num1 = Number(numberAndOperator[0].replace(/[⁺⁻]/, function (a) { return a === "⁺" ? "+" : "-" }));
@@ -74,12 +75,8 @@ function calculator(numberAndOperator) {
             display.textContent = `${shortResult}`;
         }else{display.textContent = shortResult;}
             }
-    
-    
-    
-    
-    
 }
+
 function signPositiveNegative() {
     if (positiveNegative.test(display.textContent) && operators.test(content) || operators.test(content)) {
         const operatorIndex = content.search(operators);
@@ -98,11 +95,13 @@ function signPositiveNegative() {
             } else {display.textContent = "⁺".concat(display.textContent);}
     }
 }
+
 function operatorDisplay(e) {
         if (operators.test(` ${e.textContent} `) && operators.test(content)) {
             display.textContent = display.textContent.replace(operators, e.textContent);
         }else{display.textContent = display.textContent += ` ${e.textContent} `;}
 }
+
 function pointDisplay(e, point) {
     if (/\./.test(display.textContent) && operators.test(content)) {
             if (point >= 2) {
@@ -114,6 +113,7 @@ function pointDisplay(e, point) {
     else if (/\./.test(content) && /\./.test(e.textContent)) { return } 
     else { display.textContent += `${e.textContent}`}
 }
+
 function inputbutton(e) {
     if (display.textContent == `Hello` || display.textContent == `Infinity` || display.textContent == `NaN` || display.textContent == `undefined` || display.textContent == `infinit`) { display.textContent = `` };
     const mouseupTime = e.timeStamp,
@@ -129,33 +129,28 @@ function inputbutton(e) {
             history();
             break;
         case '±':
-            signPositiveNegative()
+            signPositiveNegative();
             break;
         case ".":
-            pointDisplay(this, point)
+            pointDisplay(this, point);
             break;
     }
 
     if (numPad.test(this.textContent)) { display.textContent += `${this.textContent}`; }
     else if (operators.test(this.textContent)) { operatorDisplay(this) };
-    
     numAndOp = display.textContent.split(' ');
-    num1 = numAndOp[0]
-    num2 = numAndOp[2]
-    
+    num1 = numAndOp[0];
+    num2 = numAndOp[2];
     content = display.textContent;
 }
 
 buttons.forEach(button => button.addEventListener('click', inputbutton));
 clearBtn.addEventListener('mousedown', (e) => mousedownTime = e.timeStamp);
-
 function deleteHistory() {
     const historyLogs = document.querySelectorAll('.historyResultLog');
     historyLogs.forEach((b) => {
         b.classList.add('animationClear');
         setTimeout(() => {historyResult.removeChild(b);}, 900);
     })
-    
 }
-
 clearHistory.addEventListener('click', deleteHistory);
